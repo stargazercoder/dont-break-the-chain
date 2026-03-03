@@ -1,37 +1,42 @@
-import 'package:google_sign_in/google_sign_in.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-import '../constants/supabase_constants.dart';
 import 'supabase_service.dart';
 
 class AuthService {
   final _supabase = SupabaseService.client;
 
-  // Google Sign In
-  Future<AuthResponse> signInWithGoogle() async {
-    final googleSignIn = GoogleSignIn(
-      clientId: SupabaseConstants.googleClientId,
-      serverClientId: SupabaseConstants.googleClientId,
+  // E-posta ile kayıt ol
+  Future<AuthResponse> signUp({
+    required String email,
+    required String password,
+    String? displayName,
+  }) async {
+    return await _supabase.auth.signUp(
+      email: email,
+      password: password,
+      data: {
+        'full_name': displayName ?? email.split('@').first,
+      },
     );
+  }
 
-    final googleUser = await googleSignIn.signIn();
-    if (googleUser == null) throw Exception('Google girişi iptal edildi');
-
-    final googleAuth = await googleUser.authentication;
-    final idToken = googleAuth.idToken;
-    final accessToken = googleAuth.accessToken;
-
-    if (idToken == null) throw Exception('Google token alinamadi');
-
-    return await _supabase.auth.signInWithIdToken(
-      provider: OAuthProvider.google,
-      idToken: idToken,
-      accessToken: accessToken,
+  // E-posta ile giriş yap
+  Future<AuthResponse> signIn({
+    required String email,
+    required String password,
+  }) async {
+    return await _supabase.auth.signInWithPassword(
+      email: email,
+      password: password,
     );
+  }
+
+  // Şifre sıfırlama
+  Future<void> resetPassword(String email) async {
+    await _supabase.auth.resetPasswordForEmail(email);
   }
 
   // Sign Out
   Future<void> signOut() async {
-    await GoogleSignIn().signOut();
     await _supabase.auth.signOut();
   }
 
