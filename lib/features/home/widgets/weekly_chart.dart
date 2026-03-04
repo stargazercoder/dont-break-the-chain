@@ -45,7 +45,7 @@ class WeeklyChart extends StatelessWidget {
                 barTouchData: BarTouchData(
                   enabled: true,
                   touchTooltipData: BarTouchTooltipData(
-                    getTooltipColor: (_) => AppColors.primary,
+                    tooltipBgColor: AppColors.primary,
                     getTooltipItem: (group, groupIndex, rod, rodIndex) {
                       return BarTooltipItem(
                         '${rod.toY.toInt()} tamamlandı',
@@ -93,7 +93,7 @@ class WeeklyChart extends StatelessWidget {
                 borderData: FlBorderData(show: false),
                 barGroups: List.generate(7, (i) {
                   // TODO: Replace with real data
-                  final value = i <= todayIndex ? (3 + (i % 4)).toDouble() : 0;
+                  final value = i <= todayIndex ? (3 + (i % 4)).toDouble() : 0.0;
                   return BarChartGroupData(
                     x: i,
                     barRods: [
