@@ -224,3 +224,55 @@ Home ekranında rastgele gösterilir:
 7. Bugün en iyi versiyonun ol.
 8. Her yeni gün, yeni bir başlangıç.
 9. Disiplin, özgürlüğe giden yoldur.
+
+---
+
+## 10. v2.0 Güncellemesi (Mart 2026)
+
+### Tema Değişikliği
+Tüm uygulama **mor (#6C63FF)** → **turuncu (#FF6B2C)** olarak güncellendi.
+Detaylar: `lib/core/constants/color_constants.dart`
+
+Yeni renk tokenları eklendi: `streakFire`, `streakGold`, `section*` (fihrist renkleri), `reminder*` (hatırlatma türü renkleri)
+
+### Yeni Supabase Tabloları (11 tablo)
+
+| Tablo | Açıklama |
+|-------|----------|
+| `notebook_sections` | Not defteri bölümleri (fihrist) |
+| `notebook_entries` | Not kayıtları (text/checklist/table) |
+| `calendar_events` | Takvim etkinlikleri |
+| `reminders` | Tekrarlayan hatırlatmalar (ilaç/su/uyku) |
+| `reminder_logs` | Hatırlatma geçmişi |
+| `water_logs` | Su tüketim kayıtları |
+| `sleep_logs` | Uyku/uyanma kayıtları |
+| `goals` | Hedefler (yıllık/aylık/haftalık, self-referencing) |
+| `streak_rewards` | Streak ödül tanımları |
+| `user_rewards` | Kazanılmış ödüller |
+| `stickers` | Sticker tanımları |
+| `user_stickers` | Kullanıcı sticker'ları |
+| `themes` | Tema tanımları |
+| `user_themes` | Açılmış temalar |
+| `daily_questions` | Günlük soru havuzu (60 soru) |
+| `daily_question_answers` | Kullanıcı cevapları |
+
+### Seed Data
+- **10 streak ödülü:** 3 gün (rozet) → 365 gün (tüm ödüller)
+- **7 tema:** Turuncu Enerji (varsayılan), Okyanus Mavisi, Orman Yeşili, Gece Moru, Gül Kurusu, Altın Sarısı, Gökkuşağı
+- **60 günlük soru:** 6 kategori (öz-farkındalık, hedef, minnettarlık, motivasyon, ilişkiler, alışkanlıklar)
+- **Otomatik trigger:** Yeni kullanıcıya 7 varsayılan not defteri bölümü oluşturulur
+
+### Tam PRD
+Detaylı ürün gereksinimleri: `_Docs/PRD_V2.md`
+
+### Henüz Flutter Kodu Yazılmamış Modüller
+Aşağıdaki modüller için DB tabloları hazır ama Flutter ekranları/servisleri henüz yok:
+- [ ] Not Defteri ekranı + fihrist UI
+- [ ] Takvim etkinlik ekleme/düzenleme
+- [ ] Hatırlatıcı yönetimi (ilaç, su, uyku)
+- [ ] Hedef sistemi ekranları
+- [ ] Streak ödül popup'ları
+- [ ] Günlük soru akışı (sabah/akşam)
+- [ ] Tema değiştirme ekranı
+- [ ] Sticker sistemi
+- [ ] Bottom nav güncelleme (Defter tabı ekleme)
