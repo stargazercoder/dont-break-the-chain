@@ -9,24 +9,29 @@ class MainShell extends StatelessWidget {
   int _currentIndex(BuildContext context) {
     final location = GoRouterState.of(context).matchedLocation;
     if (location == '/') return 0;
-    if (location == '/calendar') return 1;
-    if (location == '/leaderboard') return 2;
-    if (location == '/profile') return 3;
+    if (location == '/notebook') return 1;
+    if (location == '/calendar') return 2;
+    if (location == '/chains') return 3;
+    if (location == '/leaderboard') return 4;
+    if (location == '/profile') return 5;
     return 0;
   }
 
   void _onTap(BuildContext context, int index) {
     switch (index) {
       case 0: context.go('/');
-      case 1: context.go('/calendar');
-      case 2: context.go('/leaderboard');
-      case 3: context.go('/profile');
+      case 1: context.go('/notebook');
+      case 2: context.go('/calendar');
+      case 3: context.go('/chains');
+      case 4: context.go('/leaderboard');
+      case 5: context.go('/profile');
     }
   }
 
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
+    final currentIdx = _currentIndex(context);
 
     return Scaffold(
       body: child,
@@ -36,43 +41,67 @@ class MainShell extends StatelessWidget {
         backgroundColor: AppColors.primary,
         child: const Icon(Icons.add_rounded, size: 28, color: Colors.white),
       ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      bottomNavigationBar: BottomAppBar(
-        shape: const CircularNotchedRectangle(),
-        notchMargin: 8,
-        color: isDark ? AppColors.darkSurface : AppColors.surface,
-        elevation: 12,
-        child: SizedBox(
-          height: 60,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              _NavItem(
-                icon: Icons.home_rounded,
-                label: 'Ana Sayfa',
-                isActive: _currentIndex(context) == 0,
-                onTap: () => _onTap(context, 0),
-              ),
-              _NavItem(
-                icon: Icons.calendar_month_rounded,
-                label: 'Takvim',
-                isActive: _currentIndex(context) == 1,
-                onTap: () => _onTap(context, 1),
-              ),
-              const SizedBox(width: 48), // Space for FAB
-              _NavItem(
-                icon: Icons.leaderboard_rounded,
-                label: 'Sıralama',
-                isActive: _currentIndex(context) == 2,
-                onTap: () => _onTap(context, 2),
-              ),
-              _NavItem(
-                icon: Icons.person_rounded,
-                label: 'Profil',
-                isActive: _currentIndex(context) == 3,
-                onTap: () => _onTap(context, 3),
-              ),
-            ],
+      bottomNavigationBar: Container(
+        decoration: BoxDecoration(
+          color: isDark ? AppColors.darkSurface : AppColors.surface,
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.08),
+              blurRadius: 12,
+              offset: const Offset(0, -2),
+            ),
+          ],
+        ),
+        child: SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 6),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                _NavItem(
+                  icon: Icons.home_rounded,
+                  label: 'Ana Sayfa',
+                  isActive: currentIdx == 0,
+                  color: AppColors.primary,
+                  onTap: () => _onTap(context, 0),
+                ),
+                _NavItem(
+                  icon: Icons.auto_stories_rounded,
+                  label: 'Defter',
+                  isActive: currentIdx == 1,
+                  color: AppColors.sectionDiary,
+                  onTap: () => _onTap(context, 1),
+                ),
+                _NavItem(
+                  icon: Icons.calendar_month_rounded,
+                  label: 'Takvim',
+                  isActive: currentIdx == 2,
+                  color: AppColors.info,
+                  onTap: () => _onTap(context, 2),
+                ),
+                _NavItem(
+                  icon: Icons.local_fire_department_rounded,
+                  label: 'Zincirler',
+                  isActive: currentIdx == 3,
+                  color: AppColors.streakFire,
+                  onTap: () => _onTap(context, 3),
+                ),
+                _NavItem(
+                  icon: Icons.emoji_events_rounded,
+                  label: 'Sıralama',
+                  isActive: currentIdx == 4,
+                  color: AppColors.accent,
+                  onTap: () => _onTap(context, 4),
+                ),
+                _NavItem(
+                  icon: Icons.person_rounded,
+                  label: 'Profil',
+                  isActive: currentIdx == 5,
+                  color: AppColors.sectionGoals,
+                  onTap: () => _onTap(context, 5),
+                ),
+              ],
+            ),
           ),
         ),
       ),
@@ -84,12 +113,14 @@ class _NavItem extends StatelessWidget {
   final IconData icon;
   final String label;
   final bool isActive;
+  final Color color;
   final VoidCallback onTap;
 
   const _NavItem({
     required this.icon,
     required this.label,
     required this.isActive,
+    required this.color,
     required this.onTap,
   });
 
@@ -98,23 +129,30 @@ class _NavItem extends StatelessWidget {
     return InkWell(
       onTap: onTap,
       borderRadius: BorderRadius.circular(12),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 200),
+        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+        decoration: isActive
+            ? BoxDecoration(
+                color: color.withOpacity(0.1),
+                borderRadius: BorderRadius.circular(12),
+              )
+            : null,
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             Icon(
               icon,
-              color: isActive ? AppColors.primary : AppColors.textHint,
-              size: 24,
+              color: isActive ? color : AppColors.textHint,
+              size: isActive ? 24 : 22,
             ),
             const SizedBox(height: 2),
             Text(
               label,
               style: TextStyle(
-                fontSize: 10,
-                fontWeight: isActive ? FontWeight.w600 : FontWeight.w400,
-                color: isActive ? AppColors.primary : AppColors.textHint,
+                fontSize: 9,
+                fontWeight: isActive ? FontWeight.w700 : FontWeight.w400,
+                color: isActive ? color : AppColors.textHint,
               ),
             ),
           ],

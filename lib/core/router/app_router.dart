@@ -7,9 +7,11 @@ import '../../features/home/screens/main_shell.dart';
 import '../../features/home/screens/home_screen.dart';
 import '../../features/habits/screens/add_habit_screen.dart';
 import '../../features/habits/screens/habit_detail_screen.dart';
+import '../../features/notebook/screens/notebook_screen.dart';
 import '../../features/calendar/screens/calendar_screen.dart';
-import '../../features/profile/screens/profile_screen.dart';
+import '../../features/chains/screens/chains_screen.dart';
 import '../../features/leaderboard/screens/leaderboard_screen.dart';
+import '../../features/profile/screens/profile_screen.dart';
 import '../../features/friends/screens/friends_screen.dart';
 
 final _rootNavigatorKey = GlobalKey<NavigatorState>();
@@ -41,8 +43,16 @@ final appRouterProvider = Provider<GoRouter>((ref) {
             builder: (context, state) => const HomeScreen(),
           ),
           GoRoute(
+            path: '/notebook',
+            builder: (context, state) => const NotebookScreen(),
+          ),
+          GoRoute(
             path: '/calendar',
             builder: (context, state) => const CalendarScreen(),
+          ),
+          GoRoute(
+            path: '/chains',
+            builder: (context, state) => const ChainsScreen(),
           ),
           GoRoute(
             path: '/leaderboard',
